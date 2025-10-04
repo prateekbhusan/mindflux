@@ -1,5 +1,4 @@
 import { DurableObject } from "cloudflare:workers"
-import { mindflux } from "mindflux"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import {
