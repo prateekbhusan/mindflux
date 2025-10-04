@@ -1,4 +1,3 @@
-import { mindflux } from "mindflux"
 import { nanoid } from "nanoid"
 import { data, type AppLoadContext } from "react-router"
 import { commitSession, getSession } from "~/session-cookies.server"
@@ -109,27 +108,22 @@ export function meta() {
     ]
 }
 
-export async function loader({ request, context }: Route.LoaderArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
     const cookies = request.headers.get("Cookie")
     const session = await getSession(cookies)
 
-    const mindflux = new mindflux({
-        apiKey: context.cloudflare.env.mindflux_API_KEY,
-    })
+    const fakeMemories = [
+        { id: 1, content: 'The core idea of MindFlux is to create a personal knowledge graph...', containerTags: [] },
+        { id: 2, content: 'Initial research shows a high demand for AI-powered note-taking tools...', containerTags: [] },
+        { id: 3, content: 'After the hackathon, the plan is to implement real-time collaboration...', containerTags: [] }
+    ];
 
     if (session.has("userId")) {
         const userId = session.get("userId")!
-        const memories = (
-            await mindflux.memories.list({
-                limit: "2000",
-                containerTags: [userId]
-            })
-        ).memories
-        console.log("memories", memories)
         return data({
             message: "Welcome back!",
             userId,
-            memories,
+            memories: fakeMemories,
         })
     }
 
@@ -154,10 +148,8 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 
 export async function action({
     request,
-    context,
 }: {
     request: Request
-    context: AppLoadContext
 }) {
     const formData = await request.formData()
     const userId = formData.get("userId") as string
@@ -167,35 +159,20 @@ export async function action({
         return data({ error: "User ID is required" }, { status: 400 })
     }
 
-    console.log(context.cloudflare.env.mindflux_API_KEY)
-    const mindflux = new mindflux({
-        apiKey: context.cloudflare.env.mindflux_API_KEY,
-    })
+    const fakeMemories = [
+        { id: 1, content: 'The core idea of MindFlux is to create a personal knowledge graph...', containerTags: [] },
+        { id: 2, content: 'Initial research shows a high demand for AI-powered note-taking tools...', containerTags: [] },
+        { id: 3, content: 'After the hackathon, the plan is to implement real-time collaboration...', containerTags: [] }
+    ];
 
     try {
         // Handle different action types
         switch (actionType) {
             case "fetch":
-                // Just return the memories
                 return data({
                     success: true,
-                    memories: (
-                        await mindflux.memories.list({
-                            limit: "2000",
-                            containerTags: [userId]
-                        })
-                    ).memories,
+                    memories: fakeMemories,
                 })
-            // case "add":
-            //   const content = formData.get("content") as string;
-            //   if (content) {
-            //     await mindflux.memory.create({
-            //       content
-            //     });
-            //   }
-            //   return data({ success: true, memories: (await mindflux.memory.list({
-            //     limit: "2000",
-            //   })).memories });
 
             case "delete": {
                 const memoryId = formData.get("memoryId") as string
@@ -207,38 +184,14 @@ export async function action({
                     )
                 }
 
-                // Delete from mindflux API
-                try {
-                    console.log(
-                        "deleting",
-                        await mindflux.memories.get(memoryId),
-                    )
-                    await mindflux.memories.delete(memoryId)
-                    // Update user data
-                    return data({
-                        success: true,
-                        message: "Memory deleted successfully",
-                        memories: (
-                            await mindflux.memories.list({
-                                limit: "2000",
-                                containerTags: [userId]
-                            })
-                        ).memories,
-                    })
-                } catch (error: unknown) {
-                    console.error("Error deleting memory:", error)
-                    return data(
-                        {
-                            error: `Error deleting memory: ${
-                                error instanceof Error
-                                    ? error.message
-                                    : String(error)
-                            }`,
-                        },
-                        { status: 500 },
-                    )
-                }
+                // Return filtered fake memories
+                return data({
+                    success: true,
+                    message: "Memory deleted successfully",
+                    memories: fakeMemories.filter(m => m.id !== Number(memoryId)),
+                })
             }
+
             case "update": {
                 const memoryId = formData.get("memoryId") as string
                 const content = formData.get("content") as string
@@ -250,60 +203,29 @@ export async function action({
                     )
                 }
 
-                // Update from mindflux API
-                try {
-                    console.log(
-                        "updating",
-                        await mindflux.memories.get(memoryId),
-                    )
-                    await mindflux.memories.update(memoryId, { content })
-                    // Update user data
-                    return data({
-                        success: true,
-                        message: "Memory updated successfully",
-                        memories: (
-                            await mindflux.memories.list({
-                                limit: "2000",
-                                containerTags: [userId],
-                            })
-                        ).memories,
-                    })
-                } catch (error: unknown) {
-                    console.error("Error updating memory:", error)
-                    return data(
-                        {
-                            error: `Error updating memory: ${
-                                error instanceof Error
-                                    ? error.message
-                                    : String(error)
-                            }`,
-                        },
-                        { status: 500 },
-                    )
-                }
+                // Return memories with updated content
+                return data({
+                    success: true,
+                    message: "Memory updated successfully",
+                    memories: fakeMemories.map(m => 
+                        m.id === Number(memoryId) 
+                            ? { ...m, content } 
+                            : m
+                    ),
+                })
             }
 
             case "restore": {
                 const cookies = request.headers.get("Cookie")
                 const session = await getSession(cookies)
-
-                // Set the userId in the session
                 session.set("userId", userId)
-
-                // Get memories for the restored userId
-                const memories = (
-                    await mindflux.memories.list({
-                        limit: "2000",
-                        containerTags: [userId]
-                    })
-                ).memories
 
                 return data(
                     {
                         success: true,
                         message: "Session restored successfully",
                         userId,
-                        memories,
+                        memories: fakeMemories,
                     },
                     {
                         headers: {
