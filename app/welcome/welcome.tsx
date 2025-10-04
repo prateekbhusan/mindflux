@@ -1,7 +1,6 @@
 import type { MemoryListResponse } from "@mindflux/sdk/resources/memory.mjs"
 import { useCallback, useEffect, useState } from "react"
 import { useFetcher } from "react-router"
-import logoMark from "./logomark.svg"
 
 export function Welcome({
     message,
@@ -219,10 +218,6 @@ export function Welcome({
             {/* Top navigation */}
             <header className="relative w-full px-6 py-6 flex justify-between items-center backdrop-blur-sm border-b border-white/5">
                 <div className="flex items-center gap-3">
-                    <div className="relative">
-                        <img src={logoMark} alt="mindflux" className="w-8 h-8 relative z-10" />
-                        <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-md"></div>
-                    </div>
                     <span className="font-semibold text-white/90 text-lg">mindflux</span> 
                     <span className="text-blue-400 font-medium">mcp</span>
                 </div>
