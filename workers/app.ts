@@ -230,31 +230,11 @@ export class MyDurableObject extends DurableObject<Env> {
 }
 
 export default {
-    async fetch(request: Request, env: Env, ctx: ExecutionContext) {
-        const url = new URL(request.url)
-
-        if (
-            url.pathname.includes("sse") ||
-            url.pathname.endsWith("/messages")
-        ) {
-            const sessionId = url.searchParams.get("sessionId")
-
-            const namespace = env.MY_DO
-
-            let stub: DurableObjectStub<MyDurableObject>
-
-            if (sessionId) {
-                const id = namespace.idFromString(sessionId)
-                stub = namespace.get(id) as DurableObjectStub<MyDurableObject>
-            } else {
-                const id = namespace.newUniqueId()
-                stub = namespace.get(id) as DurableObjectStub<MyDurableObject>
-            }
-            return stub.fetch(request)
-        }
-
-        return requestHandler(request, {
-            cloudflare: { env, ctx },
-        })
+    async fetch(request: Request) {
+        // Return a basic response for the demo
+        return new Response("MindFlux Demo Server", {
+            status: 200,
+            headers: { 'Content-Type': 'text/plain' },
+        });
     },
 }
