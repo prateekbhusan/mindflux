@@ -1,3 +1,4 @@
+import { type HandleDocumentRequestFunction } from '@remix-run/node';
 import { isbot } from 'isbot';
 import { renderToReadableStream } from 'react-dom/server';
 import { ServerRouter } from 'react-router';
