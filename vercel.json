@@ -1,6 +1,10 @@
 {
-  "buildCommand": "npx remix build",
-  "devCommand": "npx remix dev",
-  "installCommand": "npm install",
-  "framework": "remix"
+  "build": {
+    "env": {
+      "ENABLE_VC_BUILD": "1"
+    }
+  },
+  "buildCommand": "remix build",
+  "devCommand": "remix dev",
+  "installCommand": "npm install"
 }

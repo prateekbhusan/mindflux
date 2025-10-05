@@ -1,18 +1,19 @@
 {
 	"name": "@repo/mcp",
 	"private": true,
-	"type": "module",
+	"sideEffects": false,
 	"version": "0.0.0",
 	"scripts": {
-		"dev": "npx remix dev",
-		"build": "npx remix build",
-		"start": "npx remix-serve ./build",
-		"typecheck": "tsc -b"
+		"build": "remix build",
+		"dev": "remix dev",
+		"start": "remix-serve build",
+		"typecheck": "tsc"
 	},
 	"dependencies": {
 		"@remix-run/node": "^2.5.0",
 		"@remix-run/react": "^2.5.0",
 		"@remix-run/serve": "^2.5.0",
+		"@remix-run/vercel": "^1.19.3",
 		"@vercel/node": "^3.2.29",
 		"isbot": "^5.1.26",
 		"nanoid": "^5.1.5",
