@@ -29,8 +29,7 @@
 		"zod": "^3.24.2"
 	},
 	"devDependencies": {
-		"@cloudflare/vite-plugin": "^1.0.7",
-		"@cloudflare/workers-types": "^4.20250415.0",
+		"@remix-run/dev": "^2.5.0",
 		"@react-router/dev": "^7.5.0",
 		"@tailwindcss/vite": "^4.1.4",
 		"@types/node": "^20.17.30",
@@ -39,7 +38,6 @@
 		"tailwindcss": "^4.1.4",
 		"typescript": "^5.8.3",
 		"vite": "^6.2.6",
-		"vite-tsconfig-paths": "^5.1.4",
-		"wrangler": "^4.11.1"
+		"vite-tsconfig-paths": "^5.1.4"
 	}
 }
