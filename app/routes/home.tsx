@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid"
 import { data, type AppLoadContext } from "react-router"
-import { commitSession, getSession } from "~/session-cookies.server"
+import { commitSession, getSession } from "../session-cookies.server"
 import { Welcome } from "../welcome/welcome"
 import type { Route } from "./+types/home"
 
