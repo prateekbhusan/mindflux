@@ -1,4 +1,11 @@
-import type { MemoryListResponse } from "@mindflux/sdk/resources/memory.mjs"
+// Define memory types locally
+type Memory = {
+    id: string;
+    content: string;
+    containerTags: string[];
+    summary?: string;
+    title: string;
+}
 import { useCallback, useEffect, useState } from "react"
 import { useFetcher } from "react-router"
 
@@ -9,7 +16,7 @@ export function Welcome({
 }: {
     message: string
     userId: string
-    initialMemories: MemoryListResponse.Memory[]
+    initialMemories: Memory[]
 }) {
     const [selectedClient, setSelectedClient] = useState<string>("claude")
     const clients = [
@@ -23,7 +30,7 @@ export function Welcome({
     ]
     const currentUrl = "https://mcp.mindflux.ai"
     const [memories, setMemories] =
-        useState<MemoryListResponse.Memory[]>(initialMemories)
+        useState<Memory[]>(initialMemories)
     const [isDeleting, setIsDeleting] = useState<string | null>(null)
     const [isEditing, setIsEditing] = useState<string | null>(null)
     const [editedTitle, setEditedTitle] = useState<string>("")
@@ -72,7 +79,7 @@ export function Welcome({
     }
 
     // Function to start editing a memory
-    const startEditing = (memory: MemoryListResponse.Memory) => {
+    const startEditing = (memory: Memory) => {
         setIsEditing(memory.id)
         setEditedTitle(memory.title)
     }
