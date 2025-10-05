@@ -3,6 +3,8 @@ import { data, type AppLoadContext } from "react-router"
 import { commitSession, getSession } from "../session-cookies.server"
 import { Welcome } from "../welcome/welcome"
 import type { Route } from "./+types/home"
+import { FAKE_NODES, FAKE_LINKS } from '../lib/fake-graph-data'
+import React from 'react'
 
 export function meta() {
     return [
@@ -250,11 +252,42 @@ export async function action({
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
+    const [graphData, setGraphData] = React.useState({ nodes: [], links: [] });
+    const [isLoading, setIsLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        //
+        // FAKE AI PROCESSING
+        // In a real app, this would be a complex API call.
+        // Here, we simulate a delay and then randomly select from our fake data
+        // to make the graph look different each time.
+        //
+        // TODO: Optimize the K-Means clustering algorithm for faster node grouping.
+        //
+        const timer = setTimeout(() => {
+            const nodesToShow = FAKE_NODES.slice(0, Math.floor(Math.random() * FAKE_NODES.length) + 3);
+            const nodeIds = new Set(nodesToShow.map(n => n.id));
+            const linksToShow = FAKE_LINKS.filter(l => nodeIds.has(l.source) && nodeIds.has(l.target));
+
+            setGraphData({ nodes: nodesToShow, links: linksToShow });
+            setIsLoading(false);
+        }, 1500); // Simulate a 1.5 second network delay
+
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
-        <Welcome
-            message={loaderData.message}
-            userId={loaderData.userId}
-            initialMemories={loaderData.memories}
-        />
+        <div>
+            {isLoading ? (
+                <div>Loading AI Knowledge Graph...</div>
+            ) : (
+                <Welcome
+                    message={loaderData.message}
+                    userId={loaderData.userId}
+                    initialMemories={loaderData.memories}
+                    graphData={graphData}
+                />
+            )}
+        </div>
     )
 }
