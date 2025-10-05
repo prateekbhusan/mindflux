@@ -1,6 +1,4 @@
 import { createRequestHandler } from '@remix-run/node';
-
-// eslint-disable-next-line import/no-relative-parent-imports
-const build = require('../build');
+import * as build from '../build/index.js';
 
 export default createRequestHandler(build, process.env.NODE_ENV);
