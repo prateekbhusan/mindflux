@@ -14,13 +14,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./app/*"]
-    }
+    "jsx": "react-jsx"
   },
   "include": ["app", "vite.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
+}
 }
 }
