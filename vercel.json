@@ -1,10 +1,15 @@
 {
-  "build": {
-    "env": {
-      "ENABLE_VC_BUILD": "1"
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node"
     }
-  },
-  "buildCommand": "remix build",
-  "devCommand": "remix dev",
-  "installCommand": "npm install"
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.js"
+    }
+  ]
 }

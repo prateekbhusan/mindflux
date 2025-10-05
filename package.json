@@ -4,9 +4,9 @@
 	"sideEffects": false,
 	"version": "0.0.0",
 	"scripts": {
-		"build": "remix build",
-		"dev": "remix dev",
-		"start": "remix-serve build",
+		"build": "npx remix build",
+		"dev": "npx remix dev",
+		"start": "npx remix-serve build",
 		"typecheck": "tsc"
 	},
 	"dependencies": {

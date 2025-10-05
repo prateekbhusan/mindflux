@@ -1,8 +1,23 @@
-import { type HandleDocumentRequestFunction } from '@remix-run/node';
-import { isbot } from 'isbot';
-import { renderToReadableStream } from 'react-dom/server';
-import { ServerRouter } from 'react-router';
-import type { AppLoadContext, EntryContext } from 'react-router';
+import { RemixServer } from "@remix-run/react";
+import { renderToString } from "react-dom/server";
+
+export default function handleRequest(
+  request,
+  responseStatusCode,
+  responseHeaders,
+  remixContext
+) {
+  const markup = renderToString(
+    <RemixServer context={remixContext} url={request.url} />
+  );
+
+  responseHeaders.set("Content-Type", "text/html");
+
+  return new Response("<!DOCTYPE html>" + markup, {
+    status: responseStatusCode,
+    headers: responseHeaders,
+  });
+}
 
 export default async function handleServerRequest(
     request: Request,
