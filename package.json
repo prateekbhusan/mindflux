@@ -5,7 +5,7 @@
 	"version": "0.0.0",
 	"scripts": {
 		"dev": "vite",
-		"build": "vite build && vite build --ssr",
+		"build": "vite build && vite build --ssr server/entry.server.tsx",
 		"start": "vite preview",
 		"typecheck": "tsc -b"
 	},
