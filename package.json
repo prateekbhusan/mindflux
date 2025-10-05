@@ -15,8 +15,6 @@
 		"@total-typescript/tsconfig": "^1.0.4",
 		"@valibot/to-json-schema": "^1.0.0",
 		"effect": "^3.14.8",
-		"hono": "^4.7.6",
-		"hono-rate-limiter": "^0.4.2",
 		"isbot": "^5.1.26",
 		"muppet": "^0.2.1",
 		"nanoid": "^5.1.5",
