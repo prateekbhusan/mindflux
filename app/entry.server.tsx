@@ -1,9 +1,9 @@
-import {
-  createReadableStreamFromReadable,
-  handleRequest,
-} from '@remix-run/node';
+import { isbot } from 'isbot';
+import { renderToReadableStream } from 'react-dom/server';
+import { ServerRouter } from 'react-router';
+import type { AppLoadContext, EntryContext } from 'react-router';
 
-export default async function handleRequest(
+export default async function handleServerRequest(
     request: Request,
     responseStatusCode: number,
     responseHeaders: Headers,

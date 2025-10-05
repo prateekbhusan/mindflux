@@ -13,6 +13,16 @@
         "baseUrl": ".",
         "paths": {
             "~/*": ["./app/*"]
-        }
-    }
+        },
+        "jsx": "react-jsx",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "allowJs": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true
+    },
+    "include": ["app/**/*.ts", "app/**/*.tsx"],
+    "exclude": ["node_modules"]
+}
 }

@@ -3,4 +3,10 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [tsconfigPaths()],
+  server: {
+    adapter: 'vercel',
+    build: true
+  },
+  appDirectory: 'app',
+  serverMinify: false
 });
