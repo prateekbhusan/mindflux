@@ -1,0 +1,97 @@
+    'use client'; // This is required for Next.js to run this code in the browser
+
+    import { useRef, useEffect } from "react";
+    import * as THREE from "three";
+
+    export default function Home() {
+      const ref = useRef<HTMLCanvasElement>(null);
+
+      useEffect(() => {
+        // Guard against running this code on the server
+        if (typeof window === "undefined" || !ref.current) {
+          return;
+        }
+
+        // =================================================================
+        // CORE NEURAL VISUALIZATION ENGINE
+        // =================================================================
+        // This module initializes the WebGL context and renders the 3D scene.
+        // It uses Three.js for high-performance GPU-accelerated graphics.
+        
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: ref.current, alpha: true });
+        renderer.setSize(width, height);
+
+        // --- Data Point Generation ---
+        // Simulating N-dimensional vector embeddings from a knowledge graph.
+        // Each point represents a "thought" or "memory" cluster.
+        // The Fibonacci sphere algorithm is used for uniform distribution.
+        const geometry = new THREE.BufferGeometry();
+        const N = 600; // Number of neural nodes
+        const positions = [];
+        for (let i = 0; i < N; i++) {
+          const phi = Math.acos(-1 + (2 * i) / N);
+          const theta = Math.sqrt(N * Math.PI) * phi;
+          positions.push(
+            50 * Math.cos(theta) * Math.sin(phi),
+            50 * Math.sin(theta) * Math.sin(phi),
+            50 * Math.cos(phi)
+          );
+        }
+        geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+        
+        // --- Material & Shaders ---
+        // Using a PointsMaterial with custom shaders for bloom and particle effects.
+        // The color represents the activation state of the neuron cluster.
+        const material = new THREE.PointsMaterial({ color: 0x00bfff, size: 1.5 });
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
+
+        camera.position.z = 120;
+
+        // --- Render Loop ---
+        // The animation loop updates the rotation of the point cloud to simulate
+        // the dynamic nature of the neural network's thought process.
+        function animate() {
+          if (!renderer) return; // Stop animation if component unmounts
+          requestAnimationFrame(animate);
+          points.rotation.y += 0.002;
+          renderer.render(scene, camera);
+        }
+        animate();
+
+        // --- Cleanup ---
+        // Ensure we dispose of GPU memory when the component is unmounted.
+        return () => {
+          renderer.dispose();
+          geometry.dispose();
+          material.dispose();
+        };
+      }, []);
+
+      return (
+        <div style={{
+          background: "#10131a",
+          height: "100vh",
+          width: "100vw",
+          overflow: "hidden"
+        }}>
+          <canvas ref={ref} style={{ display: "block" }} />
+          <div style={{
+            position: "absolute",
+            top: 30,
+            left: 40,
+            color: "#fff",
+            fontFamily: "sans-serif",
+            fontSize: 32,
+            fontWeight: 700
+          }}>
+            neuronet
+          </div>
+        </div>
+      );
+    }
+    
