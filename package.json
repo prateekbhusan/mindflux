@@ -6,10 +6,8 @@
 	"scripts": {
 		"dev": "react-router dev",
 		"build": "react-router build",
-		"cf-typegen": "wrangler types",
-		"deploy": "bun run build && wrangler deploy",
-		"preview": "bun run build && vite preview",
-		"typecheck": "wrangler types && react-router typegen && tsc -b"
+		"preview": "vite preview",
+		"typecheck": "tsc -b"
 	},
 	"dependencies": {
 		"@hono-rate-limiter/cloudflare": "^0.2.2",
