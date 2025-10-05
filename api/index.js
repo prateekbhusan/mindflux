@@ -1,15 +1,6 @@
-import { handleRequest } from '@remix-run/node';
-import * as build from '../build/server/index.js';
+import { createRequestHandler } from '@remix-run/node';
 
-export default async function handler(req) {
-  try {
-    return await handleRequest(
-      req,
-      undefined,
-      build
-    );
-  } catch (error) {
-    console.error(error);
-    return new Response('Internal Server Error', { status: 500 });
-  }
-}
+// eslint-disable-next-line import/no-relative-parent-imports
+const build = require('../build');
+
+export default createRequestHandler(build, process.env.NODE_ENV);
